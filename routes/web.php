@@ -53,5 +53,8 @@ Route::post('/edit_product_confirm/{id}',[AdminController::class,'edit_product_c
 Route::get('/order',[AdminController::class,'order']);
 Route::get('/delivered/{id}',[AdminController::class,'delivered']);
 Route::get('/print_pdf/{id}',[AdminController::class,'print_pdf']);
+Route::get('/sent_email/{id}',[AdminController::class,'sent_email']);
+Route::post('/sent_user_email/{id}',[AdminController::class,'sent_user_email']);
+Route::get('/search',[AdminController::class,'search']);
 
 

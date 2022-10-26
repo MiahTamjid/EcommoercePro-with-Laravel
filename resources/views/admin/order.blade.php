@@ -37,6 +37,14 @@
           <div class="content-wrapper">
             <h1 class="title_deg">Order List</h1>
 
+            <div style="padding-left:400px; padding-bottom:30px">
+              <form action="{{ url('search') }}" method="get">
+                @csrf
+                <input style="color: black" type="text" name="search" placeholder="Search For Something">
+                <input type="submit" value="Search" class="btn btn-outline-primary">
+              </form>
+            </div>
+
             <table class="table_deg">
                 <tr class="table_hader">
                     <th>Name</th>
@@ -52,11 +60,11 @@
                     <th>Image</th>
                     <th>Delivered</th>
                     <th>Print PDF</th>
+                    <th>Sent Email</th>
                     
                 </tr>
-                @foreach ($order as $order)
-                    
-               
+                @forelse ($order as $order)
+
                 <tr>
                     <td>{{ $order->name }}</td>
                     <td>{{ $order->email }}</td>
@@ -71,9 +79,6 @@
                     <td>
                         <img class="img_deg" src="/product/{{ $order->image }}" alt="">
                     </td>
-
-
-
                     <td>
                     @if ( $order->delivery_status=='processing')
 
@@ -88,8 +93,17 @@
                     <td>
                       <a  class="btn btn-secondary" href="{{ url('print_pdf',$order->id) }}">Print PDF</a>
                     </td>
+                    <td>
+                      <a class="btn btn-info" href="{{ url('sent_email',$order->id) }}">Email</a>
+                    </td>
                 </tr>
-                 @endforeach
+                @empty
+                <tr>
+                  <td colspan="16">
+                    No Data Found!
+                  </td>
+                </tr>
+                 @endforelse
                  
             </table>
           </div>
