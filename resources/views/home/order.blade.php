@@ -20,79 +20,75 @@
       <link href="home/css/style.css" rel="stylesheet" />
       <!-- responsive style -->
       <link href="home/css/responsive.css" rel="stylesheet" />
-
       <style>
         .center{
             margin: auto;
-            width: 40%;
+            width: 60%;
+            padding: 20px;
             text-align: center;
-            padding: 30px;
-
+            
         }
         table,th,td{
             border: 1px solid black;
         }
         .th_deg{
-            font-size: 30px;
-            padding: 5px;
-            background: rgb(35, 215, 250);
+            padding: 10px;
+            background-color: rgb(170, 73, 222);
+            font-size: 20px;
+            font-weight: bold;
         }
         .img_deg{
             height: 150px;
             width: 150px;
         }
-        .total_deg{
-            font-size: 30px;
-            padding: 40px;
-        }
       </style>
    </head>
    <body>
-      <div class="hero_area">
+      
          <!-- header section strats -->
          @include('home.header')
-         @if (session()->has('order_message'))
-            <div class="alert alert-success">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
-                {{ session()->get('order_message') }}
-            </div>
-            @endif
          <!-- end header section -->
-      <div class="center">
-        <table>
-        <tr>
-            <th class="th_deg">Product Title</th>
-            <th class="th_deg">Product Quantity</th>
-            <th class="th_deg">Price</th>
-            <th class="th_deg">Image</th>
-            <th class="th_deg">Action</th>
-        </tr>
-        <?php $totalprice=0; ?>
-        @foreach ($card as $card)
-            
-        
-        <tr>
-            <td>{{ $card->product_title }}</td>
-            <td>{{ $card->quantity }}</td>
-            <td>{{ $card->price }}</td>
-            <td><img src="/product/{{ $card->image }}" alt="" class="img_deg"></td>
-            <td><a onclick="return confirm('Are you sure to remove this product?')" href="{{ url('remove_card',$card->id) }}" class="btn btn-danger">Remove Product</a></td>
-        </tr>
-        <?php $totalprice=$totalprice + $card->price ?>
-        @endforeach
-        </table>
-        <div>
-           <h1 class="total_deg"> Total Price: ${{ $totalprice }}</h1> 
-        </div>
+         <div class="center">
+            <table>
+                <tr>
+                    <th class="th_deg">Product Title</th>
+                    <th class="th_deg">Quantity</th>
+                    <th class="th_deg">Price</th>
+                    <th class="th_deg">Payment Status</th>
+                    <th class="th_deg">Delivery Status</th>
+                    <th class="th_deg">Image</th>
+                    <th class="th_deg">Cancel Order</th>
+                </tr>
+                @foreach ($order as $order)
+                    
+                
+                <tr>
+                    <td>{{ $order->product_title }}</td>
+                    <td>{{ $order->quantity }}</td>
+                    <td>{{ $order->price }}</td>
+                    <td>{{ $order->payment_status }}</td>
+                    <td>{{ $order->delivery_status }}</td>
+                    <td><img src="/product/{{ $order->image }}" alt="" class="img_deg"></td>
+                    <td>
+                        @if ($order->delivery_status=='processing')
+                        
+                        <a onclick="return confirm('Are you sure to cancel this order?')" class="btn btn-danger" href="{{ url('cancel_order',$order->id) }}">Cancel Order</a>
 
-        <div>
-            <h1 style="font-size: 25px; padding-bottom: 10px">Proceed to Order</h1>
-            <a href="{{ url('cash_order') }}" class="btn btn-danger">Cash On Delivery</a>
-             <a href="{{ url('stripe',$totalprice) }}" class="btn btn-danger">Pay Using Card</a>
-        </div>
-      </div>
-    
+                        @elseif ($order->delivery_status=='You Canceled The Order')
+                        <p style="color: red">Canceled</p>
+
+                        @else
+                        <p style="color: blue">Not Allowed</p>
+
+                        @endif
+                    </td>
+                </tr>
+                @endforeach
+            </table>
+         </div>
       
+      
+      <!-- footer end -->
       <div class="cpy_">
          <p class="mx-auto">© 2021 All Rights Reserved By <a href="https://html.design/">Free Html Templates</a><br>
          

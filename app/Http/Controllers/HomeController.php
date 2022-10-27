@@ -131,6 +131,7 @@ class HomeController extends Controller
        }
         return redirect()->back()->with('order_message','We have Received your Order. We will connect with you soon...');
     }
+
     public function stripe($totalprice){
         return view('home.stripe',compact('totalprice'));
     }
@@ -177,5 +178,26 @@ class HomeController extends Controller
         Session::flash('success', 'Payment successful!');
               
         return back();
+    }
+
+    public function show_order(){
+        if(Auth::id())
+            {
+            $id=Auth::user()->id;
+            $order= Order::where('user_id','=',$id)->get();  
+            return view('home.order',compact('order'));
+            }
+        else
+            {
+            return redirect('login');
+            }
+
+    }
+    public function cancel_order($id){
+        $order = Order::find($id);
+        $order->delivery_status='You Canceled The Order';
+        $order->save();
+        return redirect()->back(); 
+
     }
 }

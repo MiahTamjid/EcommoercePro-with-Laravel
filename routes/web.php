@@ -35,10 +35,12 @@ Route::get('/redirect',[HomeController::class,'redirect'])->middleware('auth','v
 Route::get('/product_details/{id}',[HomeController::class,'product_details']);
 Route::post('/add_card/{id}',[HomeController::class,'add_card']);
 Route::get('/show_cart',[HomeController::class,'show_cart']);
+Route::get('/show_order',[HomeController::class,'show_order']);
 Route::get('/remove_card/{id}',[HomeController::class,'remove_card']);
 Route::get('/cash_order',[HomeController::class,'cash_order']);
 Route::get('/stripe/{totalprice}',[HomeController::class,'stripe']);
 Route::post('stripe/{totalprice}',[HomeController::class,'stripePost'])->name('stripe.post');
+Route::get('/cancel_order/{id}',[HomeController::class,'cancel_order']);
 
 
 Route::get('/view_catagory',[AdminController::class,'view_catagory']);
