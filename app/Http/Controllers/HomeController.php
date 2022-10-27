@@ -17,7 +17,23 @@ class HomeController extends Controller
     public function redirect(){
         $usertype = Auth::user()->usertype;
         if($usertype=='1'){
-            return view('admin.home');
+            $total_prodect = Product::all()->count();
+            $total_order = Order::all()->count();
+            $total_user = User::all()->count();
+
+            $order = Order::all();
+            $total_revenue = 0;
+            
+            foreach($order as $order)
+            {
+                $total_revenue = $total_revenue + $order->price;
+                
+            }
+
+            $total_delivery = Order::where('delivery_status','=','Delivered')->get()->count();
+            $total_order_processing = Order::where('delivery_status','=','processing')->get()->count();
+
+            return view('admin.home',compact('total_prodect','total_order','total_user','total_revenue','total_delivery','total_order_processing'));
         }else{
             $product = Product::paginate(10);
         return view('home.userpage',compact('product'));
