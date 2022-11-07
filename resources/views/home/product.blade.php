@@ -4,7 +4,21 @@
                <h2>
                   Our <span>products</span>
                </h2>
+               <br>
+               <div>
+                  <form action="{{ url('product_search') }}" method="GET">
+                     @csrf
+                     <input type="text" name="search" placeholder="Search For Something" style="width: 500px">
+                     <input type="submit" value="search">
+                  </form>
+               </div>
             </div>
+            @if (session()->has('product_add_massage'))
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                {{ session()->get('product_add_massage') }}
+            </div>
+            @endif
             <div class="row">
                @foreach ($product as $products)
                   

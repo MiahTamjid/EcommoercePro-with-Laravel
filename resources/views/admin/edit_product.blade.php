@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <base href="/public">
+    
     <!-- Required meta tags -->
    @include('admin.css')
    <style>

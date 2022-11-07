@@ -59,7 +59,31 @@ class HomeController extends Controller
         if(Auth::id()){
             $user =Auth::user();
             $product = Product::find($id);
-            $card = new Card;
+            $userid = $user->id;
+
+            $product_exist_id = Card::where('product_id','=',$id)->where('user_id','=',$userid)->get('id')->first();
+
+            if($product_exist_id)
+            {
+                $card = Card::find($product_exist_id)->first();
+                $quantity = $card->quantity;
+                $card->quantity=$quantity + $request->quantity;
+
+                if($product->discount_price!=null)
+            {
+                $card->price= $product->discount_price * $card->quantity;;
+            }
+            else
+            {
+                $card->price= $product->price * $card->quantity;;
+            }
+
+                $card->save();
+                return redirect()->back()->with('product_add_massage','Product Added Successfully');
+            }
+            else
+            {
+                $card = new Card;
 
             $card->name= $user->name;
             $card->email= $user->email;
@@ -82,7 +106,10 @@ class HomeController extends Controller
             $card->product_id= $product->id;
             $card->quantity= $request->quantity;
             $card->save();
-            return redirect()->back();
+            return redirect()->back()->with('product_add_massage','Product Added Successfully');
+            }
+
+            
         }
         else{
             return redirect('login');
@@ -246,5 +273,30 @@ class HomeController extends Controller
         {
         return redirect('login');
         }
+    }
+
+    public function product_search(Request $request)
+    {  
+        $comment = comment::orderby('id','desc')->get();
+        $reply = reply::all();
+        $search_text=$request->search;
+        $product= Product::where('title','LIKE',"%$search_text%")->orWhere('catagory','LIKE',"%$search_text%")->paginate(10);
+        return view('home.userpage',compact('product','comment','reply'));
+    }
+
+    public function products(){
+        $product = Product::paginate(10);
+        $comment = comment::orderby('id','desc')->get();
+        $reply = reply::all();
+        return view('home.all_products',compact('product','comment','reply'));
+    }
+
+    public function search_products(Request $request)
+    {  
+        $comment = comment::orderby('id','desc')->get();
+        $reply = reply::all();
+        $search_text=$request->search;
+        $product= Product::where('title','LIKE',"%$search_text%")->orWhere('catagory','LIKE',"%$search_text%")->paginate(10);
+        return view('home.all_products',compact('product','comment','reply'));
     }
 }
