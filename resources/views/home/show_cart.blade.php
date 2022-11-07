@@ -20,6 +20,7 @@
       <link href="{{ asset('home/css/style.css') }}" rel="stylesheet" />
       <!-- responsive style -->
       <link href="{{ asset('home/css/responsive.css') }}" rel="stylesheet" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
       <style>
         .center{
@@ -48,15 +49,11 @@
       </style>
    </head>
    <body>
+    @include('sweetalert::alert')
       <div class="hero_area">
          <!-- header section strats -->
          @include('home.header')
-         @if (session()->has('order_message'))
-            <div class="alert alert-success">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
-                {{ session()->get('order_message') }}
-            </div>
-            @endif
+         
          <!-- end header section -->
       <div class="center">
         <table>
@@ -76,7 +73,7 @@
             <td>{{ $card->quantity }}</td>
             <td>{{ $card->price }}</td>
             <td><img src="/product/{{ $card->image }}" alt="" class="img_deg"></td>
-            <td><a onclick="return confirm('Are you sure to remove this product?')" href="{{ url('remove_card',$card->id) }}" class="btn btn-danger">Remove Product</a></td>
+            <td><a onclick="confirmation(event)" href="{{ url('/remove_card',$card->id) }}" class="btn btn-danger">Remove Product</a></td>
         </tr>
         <?php $totalprice=$totalprice + $card->price ?>
         @endforeach
@@ -100,6 +97,33 @@
          
          </p>
       </div>
+      <script>
+        function confirmation(ev) {
+          ev.preventDefault();
+          var urlToRedirect = ev.currentTarget.getAttribute('href');  
+          console.log(urlToRedirect); 
+          swal({
+              title: "Are you sure to cancel this product",
+              text: "You will not be able to revert this!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+          })
+          .then((willCancel) => {
+              if (willCancel) {
+  
+  
+                   
+                  window.location.href = urlToRedirect;
+                 
+              }  
+  
+  
+          });
+  
+          
+      }
+  </script>
       <!-- jQery -->
       <script src="home/js/jquery-3.4.1.min.js"></script>
       <!-- popper js -->

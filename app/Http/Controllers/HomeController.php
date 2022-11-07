@@ -13,6 +13,7 @@ use Session;
 use Stripe;
 use App\Models\Comment;
 use App\Models\Reply;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class HomeController extends Controller
 {
@@ -79,7 +80,8 @@ class HomeController extends Controller
             }
 
                 $card->save();
-                return redirect()->back()->with('product_add_massage','Product Added Successfully');
+                Alert::success('Product Added Successfully','We have added product to the card');
+                return redirect()->back();
             }
             else
             {
@@ -106,7 +108,8 @@ class HomeController extends Controller
             $card->product_id= $product->id;
             $card->quantity= $request->quantity;
             $card->save();
-            return redirect()->back()->with('product_add_massage','Product Added Successfully');
+            
+            return redirect()->back();
             }
 
             
@@ -131,6 +134,7 @@ class HomeController extends Controller
     public function remove_card($id){
         $card = Card::find($id);
         $card->delete();
+        Alert::warning('Product Remove Successfully','We have remove product to the card');
         return redirect()->back(); 
     }
 

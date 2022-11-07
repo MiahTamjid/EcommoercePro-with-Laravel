@@ -13,12 +13,12 @@
                   </form>
                </div>
             </div>
-            @if (session()->has('product_add_massage'))
+            {{-- @if (session()->has('product_add_massage'))
             <div class="alert alert-success">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
                 {{ session()->get('product_add_massage') }}
             </div>
-            @endif
+            @endif --}}
             <div class="row">
                @foreach ($product as $products)
                   
